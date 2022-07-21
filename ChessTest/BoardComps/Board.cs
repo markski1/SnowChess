@@ -21,16 +21,65 @@ namespace SnowChess.BoardComps
             }
 
             // spawn pieces on the board in a standard chess starting position
-            AddPiece('a', 1, 0, typeof(Rook));
+            for (int i = 0; i < 2; i++)
+            {
+                // remember, C# is 0 indexed, so rank 0 is actually 1 on the board, etc
+                int rank, pawnRank;
+                // where i is the team, 0 is white, 1 is black
+                if (i == 0)
+                {
+                    rank = 0;
+                    pawnRank = 1;
+                }
+                else
+                {
+                    rank = 7;
+                    pawnRank = 6;
+                }
+                AddPiece('a', rank, i, typeof(Rook));
+                AddPiece('b', rank, i, typeof(Knight));
+                AddPiece('c', rank, i, typeof(Bishop));
+                AddPiece('d', rank, i, typeof(Queen));
+                AddPiece('e', rank, i, typeof(King));
+                AddPiece('f', rank, i, typeof(Bishop));
+                AddPiece('g', rank, i, typeof(Knight));
+                AddPiece('h', rank, i, typeof(Rook));
+                // sPAWNs
+                for (char c = 'a'; c < 'i'; c++)
+                {
+                    AddPiece(c, pawnRank, i, typeof(Pawn));
+                }
+            }
+            
         }
 
         private static void AddPiece(char letter, int number, int side, Type pieceType)
         {
-            if (pieceType == typeof(Rook))
+            // We make a mess here, but it keeps board initialization clean!
+            if (pieceType == typeof(Pawn))
+            {
+                Squares[letter, number] = new Pawn(letter, number, side);
+            }
+            else if (pieceType == typeof(Rook))
             {
                 Squares[letter, number] = new Rook(letter, number, side);
             }
-                        
+            else if (pieceType == typeof(Bishop))
+            {
+                Squares[letter, number] = new Bishop(letter, number, side);
+            }
+            else if (pieceType == typeof(Knight))
+            {
+                Squares[letter, number] = new Knight(letter, number, side);
+            }
+            else if (pieceType == typeof(Queen))
+            {
+                Squares[letter, number] = new Queen(letter, number, side);
+            }
+            else if (pieceType == typeof(King))
+            {
+                Squares[letter, number] = new King(letter, number, side);
+            }
         }
 
         public static Piece GetSquareContent(char letter, int number)
