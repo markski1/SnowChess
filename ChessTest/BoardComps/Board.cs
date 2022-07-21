@@ -55,37 +55,38 @@ namespace SnowChess.BoardComps
 
         private static void AddPiece(char letter, int number, int side, Type pieceType)
         {
+            int letterValue = letter - 'a';
             // We make a mess here, but it keeps board initialization clean!
             if (pieceType == typeof(Pawn))
             {
-                Squares[letter, number] = new Pawn(letter, number, side);
+                Squares[letterValue, number] = new Pawn(letter, number, side);
             }
             else if (pieceType == typeof(Rook))
             {
-                Squares[letter, number] = new Rook(letter, number, side);
+                Squares[letterValue, number] = new Rook(letter, number, side);
             }
             else if (pieceType == typeof(Bishop))
             {
-                Squares[letter, number] = new Bishop(letter, number, side);
+                Squares[letterValue, number] = new Bishop(letter, number, side);
             }
             else if (pieceType == typeof(Knight))
             {
-                Squares[letter, number] = new Knight(letter, number, side);
+                Squares[letterValue, number] = new Knight(letter, number, side);
             }
             else if (pieceType == typeof(Queen))
             {
-                Squares[letter, number] = new Queen(letter, number, side);
+                Squares[letterValue, number] = new Queen(letter, number, side);
             }
             else if (pieceType == typeof(King))
             {
-                Squares[letter, number] = new King(letter, number, side);
+                Squares[letterValue, number] = new King(letter, number, side);
             }
         }
 
-        public static Piece GetSquareContent(char letter, int number)
+        public static dynamic GetSquareContent(char letter, int number)
         {
             // translate the letter to a number to use as index
-            int letterValue = 'a' - letter;
+            int letterValue = letter - 'a';
 
             // return invalid piece if the coords are invalid
             if (letterValue < 0 || letterValue > 7)
@@ -123,10 +124,32 @@ namespace SnowChess.BoardComps
 
             // if a pawn reaches the 8th rank (7 in code because C# is 0-indexed), it should present a way to become
             // a knight, bishop, rook or queen.
-            if (sourcePiece.Number == 7 /*&& sourcePiece is Pawn*/)
+            if (sourcePiece.Number == 7 && sourcePiece is Pawn)
             {
-                // not implemented
+                // should be implemented by the program
+                // ultimately you kinda throw the pawn away and replace it with the new piece
+                // i.e. sourcePiece = new <Piece>(sourcePiece.Letter, sourcePiece.Number, sourcePiece.side);
             }
+        }
+
+        public static void Draw()
+        {
+            string buffer = "";
+
+            Console.WriteLine("------------------------");
+            for (int i = 0; i < 8; i++)
+            {
+                buffer += "|";
+                for (char j = 'a'; j < 'i'; j++)
+                {
+                    var piece = GetSquareContent(j, i);
+                    buffer += piece.GetSymbol();
+                    buffer += '|';
+                }
+                buffer += "\n";
+            }
+            Console.WriteLine(buffer);
+            Console.WriteLine("------------------------");
         }
     }
 }

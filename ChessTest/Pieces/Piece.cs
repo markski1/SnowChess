@@ -13,11 +13,11 @@ namespace SnowChess.Pieces
         {
             if (Side == 0)
             {
-                return '?';
+                return ' ';
             }
             else
             {
-                return '?';
+                return ' ';
             }
         }
 
